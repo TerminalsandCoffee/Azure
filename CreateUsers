@@ -1,0 +1,23 @@
+#ADD CLOUD BASED USERS
+
+# Create a password object
+$PasswordProfile = New-Object -TypeName Microsoft.Open.AzureAD.Model.PasswordProfile
+
+# Assign the password
+$PasswordProfile.Password = "<Password>"
+
+# Create the new user
+New-AzureADUser -AccountEnabled $True -DisplayName "Abby Brown" -PasswordProfile $PasswordProfile -MailNickName "AbbyB" -UserPrincipalName "AbbyB@contoso.com"
+
+#output
+ObjectId                             DisplayName UserPrincipalName UserType
+--------                             ----------- ----------------- --------
+f36634c8-8a93-4909-9248-0845548bc515 Abby Brown  AbbyB@contoso.com Member
+
+
+#Azure CLI
+az ad user create --display-name "Abby Brown" \
+                  --password "<password>" \
+                  --user-principal-name "AbbyB@contoso.com" \
+                  --force-change-password-next-login true \
+                  --mail-nickname "AbbyB"
