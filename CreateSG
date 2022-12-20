@@ -1,0 +1,19 @@
+# create a network security group named myNSG in East US region. myNSG is created in the existing myResourceGroup resource group.
+
+New-AzNetworkSecurityGroup -Name myNSG -ResourceGroupName myResourceGroup  -Location  eastus
+
+#Use Get-AzNetworkSecurityGroup to list all network security groups in your subscription.
+Get-AzNetworkSecurityGroup | format-table Name, Location, ResourceGroupName, ProvisioningState, ResourceGuid
+
+#Use Get-AzNetworkSecurityGroup to view details of a network security group.
+Get-AzNetworkSecurityGroup -Name myNSG -ResourceGroupName myResourceGroup
+
+#Use Set-AzVirtualNetworkSubnetConfig to associate or dissociate a network security group to or from a subnet.
+## Place the virtual network configuration into a variable. ##
+$virtualNetwork = Get-AzVirtualNetwork -Name myVNet -ResourceGroupName myResourceGroup
+## Place the network security group configuration into a variable. ##
+$networkSecurityGroup = Get-AzNetworkSecurityGroup -Name myNSG -ResourceGroupName myResourceGroup
+## Update the subnet configuration. ##
+Set-AzVirtualNetworkSubnetConfig -Name mySubnet -VirtualNetwork $virtualNetwork -AddressPrefix 10.0.0.0/24 -NetworkSecurityGroup $networkSecurityGroup
+## Update the virtual network. ##
+Set-AzVirtualNetwork -VirtualNetwork $virtualNetwork
