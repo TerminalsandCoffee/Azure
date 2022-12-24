@@ -1,0 +1,53 @@
+#azurecli
+#create an outbound rule to allow access to Storage
+
+az network nsg rule create \
+    --resource-group $rg \
+    --nsg-name ERP-SERVERS-NSG \
+    --name Allow_Storage \
+    --priority 190 \
+    --direction Outbound \
+    --source-address-prefixes "VirtualNetwork" \
+    --source-port-ranges '*' \
+    --destination-address-prefixes "Storage" \
+    --destination-port-ranges '*' \
+    --access Allow \
+    --protocol '*' \
+    --description "Allow access to Azure Storage"
+    
+ #To create an outbound rule to deny all internet access, run the following command in Cloud Shell:
+ az network nsg rule create \
+    --resource-group $rg \
+    --nsg-name ERP-SERVERS-NSG \
+    --name Deny_Internet \
+    --priority 200 \
+    --direction Outbound \
+    --source-address-prefixes "VirtualNetwork" \
+    --source-port-ranges '*' \
+    --destination-address-prefixes "Internet" \
+    --destination-port-ranges '*' \
+    --access Deny \
+    --protocol '*' \
+    --description "Deny access to Internet."
+
+#To create a storage account for engineering documents
+STORAGEACCT=$(az storage account create \
+                --resource-group $rg \
+                --name engineeringdocs$RANDOM \
+                --sku Standard_LRS \
+                --query "name" | tr -d '"')
+ 
+ #store the primary key for your storage in a variable
+ STORAGEKEY=$(az storage account keys list \
+                --resource-group $rg \
+                --account-name $STORAGEACCT \
+                --query "[0].value" | tr -d '"')
+                
+ #create an Azure file share called erp-data-share
+ az storage share create \
+    --account-name $STORAGEACCT \
+    --account-key $STORAGEKEY \
+    --name "erp-data-share"
+ 
+                
+                
