@@ -1,0 +1,6 @@
+#Bash inside of the azure cli.
+
+az network vnet create --name "vnet1" --resource-group <TAB> --address-prefixes 10.1.0.0/16
+
+#create subnet
+az network vnet subnet create --name "subnet1" --vnet-name "vnet1" --resource-group <TAB> --address-prefixes 10.1.1.0/24
