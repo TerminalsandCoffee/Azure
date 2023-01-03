@@ -1,0 +1,5 @@
+#To open a port, specify the VM name and its resource group, along with the port number. 
+#For web traffic, you need to open port 80. Enter the resource group (-g) and VM name (-n) you specified when you created your VM:
+
+#example
+az vm open-port -g azuremolchapter2 -n webvm --port 80
